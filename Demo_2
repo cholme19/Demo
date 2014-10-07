@@ -1,0 +1,22 @@
+-- this is another version to test with SQL Dev
+
+create or replace trigger schema_trig
+before create or alter or drop
+on schema
+
+declare
+
+evnt varchar2(2000);
+v_subject varchar2(100) := 'Drop Table';
+v_message varchar2(1000);
+
+begin
+    SELECT ora_sysevent into evnt from dual;
+    if evnt = 'Drop' then
+      raise_application_error (-20900, ' you cant drop table and this evnt has been logged ');
+      
+    end if;
+v_message := 'Table dropped by: '|| user ;
+DBMS_OUTPUT.PUT_LINE( v_subject, v_message);
+--send_email ('cholme19@slu.edu', v_subject, v_message);
+end;
